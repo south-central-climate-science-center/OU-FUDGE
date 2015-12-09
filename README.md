@@ -17,12 +17,13 @@ Workflow is as follows:
 -- Create a run parameters JSON file
   - This is done manually or using the 
     "create JSON run file.R" code
-
+  - See JSON file "runfile.json"
+  
 -- On HPC, run the workflow in three steps
 -- The three steps are controlled by the shell script
    "write_fudge_pbs.sh"
 
-1. qsub the first R script
+  - 1. qsub the first R script
 
 This script works on the entire downscale region. Here you would create weather analogs, ENSO indicies, or other datasets for use during douwnscaling, but where these datasets are outside the downscaling region. Save these datasets to a binary .RData file for use within the main downscaling jobs.
 
@@ -30,7 +31,7 @@ This script also allows simple error checking ... can you write to directories? 
 
 And finally, this first R script uses logic, or user supplied parameters to "break" the downscale region in chunks to qsub as individual HPC jobs. 
 
-2. qsub the downscale region into separate jobs
+ - 2. qsub the downscale region into separate jobs
 
 This script is "MAIN_Runcode.R"
 
@@ -38,7 +39,7 @@ The chunks of the region for a job are controlled by passing commandArgs to R at
 
 The script completes the downscaling for each chunk and saves output to a binary .RData file in /scratch/. It also save fit parameters to a binary file. 
 
-3. qsub the final R script
+  - 3. qsub the final R script
 
 This script is not written yet.
 
