@@ -2,33 +2,47 @@
 
 December 9, 2015
 
-This file is the OU modification of FUDGE version "darkchocolate"
+This file is the University of Oklahoma, South-central Climate Science Center modification of FUDGE version "darkchocolate"
 
 Modifications were to make the code modular for better user modification and to allow new downscaling methods to be added sequentially with minimal code changes.
 
 See https://github.com/NOAA-GFDL/FUDGE for the original NOAA-GFDL darkchocolate version.
 
-THIS CODE IS "PROOF OF CONCEPT" ONLY FOR TESTING THE APPROACH TO MODULARIZING THE WORKFLOW. THE CODE HAS NOT BEEN TESTED AGAINST THE ORIGINAL FUDGE.
+THIS CODE IS "PROOF OF CONCEPT" ONLY FOR TESTING THE APPROACH FOR MODULARIZING THE CODE. THE CODE HAS NOT BEEN TESTED AGAINST THE ORIGINAL FUDGE.
 
-  Modifications
-  -------------
-  Workflow is as follows:
+Workflow
+--------
+Workflow is as follows:
 	
-	-- Create a run parameters JSON file
-		- This is done manually or using the 
-		  "create JSON run file.R" code
+-- Create a run parameters JSON file
+  - This is done manually or using the 
+    "create JSON run file.R" code
 
-	-- On HPC, run the workflow in three steps
+-- On HPC, run the workflow in three steps
+-- The three steps are controlled by the shell script
+   "write_fudge_pbs.sh"
 
-	1. submit the first R script
-	
-	This script 
+1. qsub the first R script
 
-BLAH
-----
+This script works on the entire downscale region. Here you would create weather analogs, ENSO indicies, or other datasets for use during douwnscaling, but where these datasets are outside the downscaling region. Save these datasets to a binary .RData file for use within the main downscaling jobs.
 
-1. blah
-2. Workshkljhsdfjkl asldkfjl falkdjf lkasdjf ol falkjsdf lasdkfj laksdjf laksdjf alsdkjf alsdkfj asldkfj 
+This script also allows simple error checking ... can you write to directories? ... are the cliamte datasets there?
+
+And finally, this first R script uses logic, or user supplied parameters to "break" the downscale region in chunks to qsub as individual HPC jobs. 
+
+2. qsub the downscale region into separate jobs
+
+This script is "MAIN_Runcode.R"
+
+The chunks of the region for a job are controlled by passing commandArgs to R at invocation.
+
+The script completes the downscaling for each chunk and saves output to a binary .RData file in /scratch/. It also save fit parameters to a binary file. 
+
+3. qsub the final R script
+
+This script is not written yet.
+
+This script will stitch together all the individual chunks together, and output to a netCDF file. It could also run bioclim or other post-processing jobs on the entire downscaled region. 
 
   Requirements
   ------------
@@ -54,8 +68,7 @@ BLAH
   Warnings
   -----------------------------
 
-  1. This code has been designed for work with the Oklahoma State University cluster "Cowboy".  We make no guarantee that it 
-  will still work properly elsewhere. 
+  1. This code has been designed for work with the Oklahoma State University cluster "Cowboy".  We make no guarantee that it will work properly elsewhere. 
 
   2. This code is a work in progress.  
 
