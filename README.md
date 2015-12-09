@@ -68,4 +68,4 @@ The United States Department of Commerce (DOC) GitHub project code is provided o
 
   Contacts
   --------
-     o Principle Investigator: Keith Dixon, Keith.Dixon@NOAA.gov
+     o BLAH
