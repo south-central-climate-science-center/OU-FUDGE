@@ -52,15 +52,15 @@ This script will stitch together all the individual chunks together, and output 
   This code requires access to:
   - R 3.2.1 or higher 
   -- R packages: 
-	ncdf4
-	ncdf4.helpers
-	CDFt
-	PCICt
-	udunits2 
-	abind
-	RNetCDF
-	ncdf.tools
-	jsonlite
+	ncdf4,
+	ncdf4.helpers,
+	CDFt,
+	PCICt,
+	udunits2, 
+	abind,
+	RNetCDF,
+	ncdf.tools,
+	jsonlite,
 	AND all package dependencies
   - netcdf 4.3.3.1 or higher
   - udunits 2.2.20 or higher
