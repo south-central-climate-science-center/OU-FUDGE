@@ -27,7 +27,7 @@ Workflow is as follows:
 
 This script works on the entire downscale region. Here you would create weather analogs, ENSO indicies, or other datasets for use during douwnscaling, but where these datasets are outside the downscaling region. Save these datasets to a binary .RData file for use within the main downscaling jobs.
 
-This script also allows simple error checking ... can you write to directories? ... are the cliamte datasets there?
+This script also allows simple error checking ... can you write to directories? ... are the climate datasets there?
 
 And finally, this first R script uses logic, or user supplied parameters to "break" the downscale region in chunks to qsub as individual HPC jobs. 
 
