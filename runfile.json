@@ -1,0 +1,72 @@
+{
+    "data.dir": "DATA/",
+    "work.dir": "WORK/",
+    "common.lib": "RLibrary/common.functions/",
+    "ds.lib": "RLibrary/DS.Library/DS.EDQMv2/",
+    "script.lib": "RLibrary/script/",
+    "ds.method": "EDQMv2",
+    "create.ds.output": true,
+    "create.fit.output": true,
+    "target.var": "tasmax",
+    "predictor.vars": [
+        "tasmax",
+        "pr",
+        "tasmin"
+    ],
+    "time.step": "day",
+    "calendar": "Gregorian",
+    "hist.target.file": "tasmax_day_GFDL-HIRAM-C360_amip_r1i1p1_US48_19790101-20081231.nc",
+    "hist.predictor.file": [
+        "tasmax_day_GFDL-HIRAM-C360-COARSENED_amip_r1i1p1_US48_19790101-20081231.nc",
+        "pr_day_GFDL-HIRAM-C360-COARSENED_amip_r1i1p1_US48_19790101-20081231.nc",
+        "tasmin_day_GFDL-HIRAM-C360-COARSENED_amip_r1i1p1_US48_19790101-20081231.nc"
+    ],
+    "fut.predictor.file": [
+        "tasmax_day_GFDL-HIRAM-C360-COARSENED_sst2090_r1i1p1_US48_20860101-20951231.nc",
+        "pr_day_GFDL-HIRAM-C360-COARSENED_sst2090_r1i1p1_US48_20860101-20951231.nc",
+        "tasmin_day_GFDL-HIRAM-C360-COARSENED_sst2090_r1i1p1_US48_20860101-20951231.nc"
+    ],
+    "apply.spat.mask": true,
+    "spat.mask.file": "interior3pt_masks.nc",
+    "apply.temporal.mask": false,
+    "create.temporal.mask": false,
+    "temporal.mask.file": {
+
+    },
+    "temporal.mask.list": [
+        "hist.target",
+        "hist.pred",
+        "fut.pred",
+        "fut.target"
+    ],
+    "create.window.mask": true,
+    "supply.window.mask": false,
+    "window.mask.files": {
+
+    },
+    "create.kfold.mask": false,
+    "supply.kfold.mask": false,
+    "kfold.mask.files": {
+
+    },
+    "apply.S3.outer": false,
+    "s3.outer.list": "PR",
+    "pr.adj.args.outer": [
+        "us_trace",
+        "TRUE",
+        "TRUE",
+        "FALSE"
+    ],
+    "apply.S3.inner": false,
+    "s3.inner.list": {
+
+    },
+    "apply.S5.inner": false,
+    "s5.inner.list": {
+
+    },
+    "LM.formula": "target ~ tasmax + log(tasmin) + pr",
+    "transform.target": false,
+    "transform.function": null
+}
+
