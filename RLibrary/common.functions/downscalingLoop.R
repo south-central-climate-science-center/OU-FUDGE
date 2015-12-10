@@ -29,7 +29,7 @@ dsLoop <- function( ){
 
   # Call DS method
   # note the DS function actually used depends on the library read
-  temp.out <- callDS()
+  temp.out <- callDS(target=target,df.hist=df.hist,df.fut=df.fut)
   ds.predict <- temp.out$ds.predict
   df.fit <- as.data.frame(temp.out$df.fit)
   

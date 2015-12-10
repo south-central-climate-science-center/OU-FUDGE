@@ -1,7 +1,7 @@
  
 
 
-callDS <- function(){
+callDS <- function(target=NA,df.hist=NA,df.fut=NA){
 
   fitting.formula <- as.formula(rp$LM.formula) 
   if(rp$transform.target){ 
