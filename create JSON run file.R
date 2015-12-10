@@ -9,6 +9,8 @@ stuff <- list(
   data.dir = 'DATA/',
   work.dir = 'WORK/',
   common.lib = 'RLibrary/common.functions/',
+
+  # options are: 'DS.lm', or 'DS.EDQMv2'
   ds.lib = 'RLibrary/DS.Library/DS.EDQMv2/',
   script.lib = 'RLibrary/script/',
   
