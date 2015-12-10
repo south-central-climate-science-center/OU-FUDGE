@@ -97,16 +97,16 @@ adjustWetDays <- function(){
       }
     }
     # create list "pr.masks" in the global environment
-    pr.masks <<- list("ref"=ref.wetdays, "adjust"=adjust.wetdays, "future"=future.wetdays)
+    pr.masks.outer <<- list("ref"=ref.wetdays, "adjust"=adjust.wetdays, "future"=future.wetdays)
     # list of precip adjusted data
     out.list <- list("ref" = as.numeric(ref.wetdays)*ref.data, 
                      "adjust" = as.numeric(adjust.wetdays)*adjust.data,
                      "future" = as.numeric(future.wetdays)*adjust.future)
     if(apply.0.mask){
       #All 0 values in the data should be NA values instead (needed to avoid calculations in the downscaling loop)
-      out.list$ref[pr.masks$ref==0] <- NA
-      out.list$adjust[pr.masks$adjust==0] <- NA
-      out.list$future[pr.masks$future==0] <- NA
+      out.list$ref[pr.masks.outer$ref==0] <- NA
+      out.list$adjust[pr.masks.outer$adjust==0] <- NA
+      out.list$future[pr.masks.outer$future==0] <- NA
     }
     return(out.list)
   }else{

@@ -4,7 +4,7 @@
 # these are applied to a single target and future target grid cell, one-at-a-time
 # allows multiple predictors, but only single target vars
 
-
+rp$apply.S3.outer <- FALSE
 if(rp$apply.S3.outer){
   message("Applying pre-DS adjustments")
   tmp <- callS3AdjustmentOuter()
@@ -17,7 +17,6 @@ if(rp$apply.S3.outer){
   rm(tmp)
 }
 
-
 # assume window masks are 1D - temporal only
 if(rp$create.window.mask){
   # create and list window masks
@@ -27,8 +26,9 @@ if(rp$create.window.mask){
   if(rp$supply.window.mask){
     # read existing window masks
     # need an example script to read in window masks and convert to time vectors 
+    # this option is not working right now ... I do not have an example window mask
     source(paste(ROOT,script.lib,'read.window.masks.R',sep=''))
-    window.masks <- rp$window.mask.files  
+    window.masks <- NA
   }else{
     window.masks <- NA
   }
@@ -36,12 +36,17 @@ if(rp$create.window.mask){
 
 # assume k-fold validation masks are 1D time vectors
 if(rp$create.kfold.mask){
-  # creates window masks and also lists these
-  source(paste(ROOT,script.lib,'create.window.mask.R',sep=''))
-  kfold.masks <- c(rp$kfold.mask.files,listb)
+  # kfold masks on the fly
+  # option not used right now
+  kfolds <- createKfoldMask.random()
+  kfold.masks <- unlist(kfolds$random)
 }else{
   if(rp$supply.kfold.mask){
-    kfold.masks <- rp$kfold.mask.files  
+    # supplied kfold masks are entered here 
+    # assumption that only one mask is allowed
+    # this option is not working ... I do not have an example kfold mask
+    source(paste(ROOT,script.lib,'read.kfold.masks.R',sep=''))
+    kfold.masks <- NA
   }else{
     kfold.masks <- NA
   }
@@ -146,5 +151,15 @@ for (window in 1:length(window.masks)){
       }
     }
   }
+}
+
+if(rp$apply.S5.outer){
+  message("Applying post DS adjustments (section 5)")
+  tmp <- callS5AdjustmentOuter()
+  # write adjustments to the DS output
+  # this code only work for PR adjustment
+  # will need to make dynamic within the callS3AdjustmentOuter function
+  ds.out <- tmp$ds.out
+  rm(tmp)
 }
 

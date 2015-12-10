@@ -58,8 +58,9 @@ stuff <- list(
   kfold.mask.files = c(NULL),  
   
   # S3 adjustments
-  apply.S3.outer = FALSE,
-  # list of instructions and the order
+  apply.S3.outer = TRUE,
+  
+  # list of instructions and their order of application
   # list must be tied to the CF variable
   s3.outer.list = c('PR'),
   # option threshold: 'us_trace' (0.01 in/day), 'global_trace' (0.1 mm/day), 'zero', or user-supplied value
@@ -67,6 +68,11 @@ stuff <- list(
                       lopt.drizzle=TRUE,
                       lopt.conserve=TRUE,
                       apply.0.mask=FALSE),
+  
+  # S5 adjustments
+  apply.S5.outer = TRUE,
+  apply.S5.wetday.mask = TRUE,
+  
   apply.S3.inner = FALSE,
   s3.inner.list = c(NULL),
   

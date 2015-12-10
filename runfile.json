@@ -49,7 +49,8 @@
     "kfold.mask.files": {
 
     },
-    "apply.S3.outer": false,
+    "apply.S3.outer": true,
+    "apply.S5.outer": true,
     "s3.outer.list": "PR",
     "pr.adj.args.outer": [
         "us_trace",
