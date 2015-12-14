@@ -11,7 +11,7 @@ for (i in 1:length(rp$predictor.vars)){
 
   #Obtain coarse GCM data
   #assume nc files names are in a list
-  tmp.dir <- paste(ROOT,rp$data.dir,sep='')
+  tmp.dir <- DATAROOT
   filename <- paste(tmp.dir, rp$hist.predictor.file[[i]], sep='')
   
   if(i==1){
@@ -43,7 +43,7 @@ for (i in 1:length(rp$predictor.vars)){
   rm(filename, tmp.dir, tmp.hist, nc.object)
 
   message(paste("Obtaining future predictor dataset for var:", p.var))
-  tmp.dir <- paste(ROOT,rp$data.dir,sep='')
+  tmp.dir <- DATAROOT
   filename <- paste(tmp.dir, rp$fut.predictor.file[[i]], sep='')
   if(i==1){
     fut.time.vector <- convertDateNcdf2R(open.nc(filename))

@@ -4,7 +4,6 @@
 # these are applied to a single target and future target grid cell, one-at-a-time
 # allows multiple predictors, but only single target vars
 
-rp$apply.S3.outer <- FALSE
 if(rp$apply.S3.outer){
   message("Applying pre-DS adjustments")
   tmp <- callS3AdjustmentOuter()
@@ -20,6 +19,7 @@ if(rp$apply.S3.outer){
 # assume window masks are 1D - temporal only
 if(rp$create.window.mask){
   # create and list window masks
+  # need to generalize to a common function name in the run parms file
   windows <- createWindowMask.seasonal()
   window.masks <- unlist(windows$season)
 }else{
@@ -104,7 +104,7 @@ for (window in 1:length(window.masks)){
         # step avoids looping over subsets of all zero's data
         if(all(!is.na(list.target$clim.in[i.index,j.index,]))){
         
-        # create subsetted datasets
+        # create subsetted target dataset
         target <- list.target$clim.in[i.index,j.index,]
         
         # put historical predictor vars into a data frame
@@ -140,7 +140,7 @@ for (window in 1:length(window.masks)){
         loop.temp <- dsLoop()
         
         # insert downscale results into the array
-        # DS output "ds.predict" is matched by dimnames
+        # DS output "ds.predict" is matched by dimnames to "ds.out"
         afill(ds.out) <- loop.temp$ds.predict 
         # parms output as data frame
         # adds i,j,window,k attributes
@@ -159,7 +159,10 @@ if(rp$apply.S5.outer){
   # write adjustments to the DS output
   # this code only work for PR adjustment
   # will need to make dynamic within the callS3AdjustmentOuter function
-  ds.out <- tmp$ds.out
+  ds.out <- tmp$out.S5
+  # clean up mask output
+  dimnames(pr.masks.outer$ds)<-NULL
   rm(tmp)
 }
+
 

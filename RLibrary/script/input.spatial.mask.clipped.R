@@ -3,7 +3,7 @@
 
 message("Checking for spatial masks")
 if(rp$apply.spat.mask){
-  tmp.dir <- paste(ROOT,rp$data.dir,sep='')
+  tmp.dir <- DATAROOT
   filename <- paste(tmp.dir, rp$spat.mask.file, sep='')
   message(paste('Obtaining spatial mask: ', filename, sep=''))
   # spatial masks are only 2D arrays [lon,lat]

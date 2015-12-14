@@ -25,20 +25,17 @@
 # generated are part of the XML run parameters file.
 #
 
-# These lines are only used on HPC
-#   consol.args <- commandArgs(TRUE)
-#   ROOT <- as.character(console.args[1])
-#   lon.lower <- as.numeric(console.args[2])
-#   lon.upper <- as.numeric(console.args[3])
-#   lat.lower <- as.numeric(console.args[4])
-#   lat.upper <- as.numeric(console.args[5])
-#   print(paste(i.lower,i.count,j.lower,j.count))
-#   start.clip <- c(i.lower,j.lower,1)
-#   count.clip <- c(i.count,j.count,-1)
+print(Sys.info()["sysname"])
 
-# keep these for use on a PC workstation
-ROOT <- "C:/FUDGE/"
-setwd(ROOT)
+choose.OS <- function(x){ 
+  return(if(x=="Windows") drive <- c("C:/FUDGE/","C:/FUDGE/DATA/","C:/FUDGE/SCRATCH/") 
+         else if(x=="Linux") drive <- c("/home/dwilson/","/scratch/dwilson/DATA/","/scratch/dwilson/"))
+}
+drive <- choose.OS(Sys.info()["sysname"])
+ROOT <- drive[1]
+DATAROOT <- drive[2]
+WORKROOT <- drive[3]
+setwd(WORKROOT)
 getwd()
 
 # these are specific to the coordinate system in the netCDF files
@@ -46,11 +43,32 @@ getwd()
 # On a PC you only run one job, so here decide which i,j index section to run 
 # start.clip is (lon-index-start, lat-index-start, time-start)
 # perfect model data are [194,114,] dimension
-start.clip <- c(50,62,1)
-# counts [1:2] must be > 1 ... for now. 
-# counts are number of grid cells for i,j and time (time=-1 mean run all cells)
-count.clip <- c(5,5,-1)
 
+if(Sys.info()["sysname"]=='Windows'){
+  # on a PC, do one section at a time
+  start.clip <- c(42,25,1)
+  # counts [1:2] must be > 1 ... for now. 
+  # counts are number of grid cells for i,j and time (time=-1 means run all cells)
+  count.clip <- c(10,15,-1)
+  job<-1  
+}
+if(Sys.info()["sysname"]=='Linux'){
+  console.args <- commandArgs(TRUE)
+  print(console.args)
+  # i is longitude index in the netCDF file, j is latitude
+  i.lower <- as.numeric(console.args[1])
+  i.count <- as.numeric(console.args[2])
+  j.lower <- as.numeric(console.args[3])
+  j.count <- as.numeric(console.args[4])
+  # perfect model is [194,114,]
+  start.clip <- c(i.lower,1,1)
+  count.clip <- c(i.count,114,-1)
+  if(start.clip[1]==1){ job<-1
+  }else{
+    job<-0
+  }
+}
+  
 
 #--------------------------------------------------------------------#
 # Section 
@@ -59,7 +77,7 @@ count.clip <- c(5,5,-1)
 #
 
 library(jsonlite)
-json.file <- file.path("C:","Fudge", "runfile.json")
+json.file <- paste0(ROOT,"runfile.json")
 # reads JSON format file and returns as list
 rp <- fromJSON(json.file, simplifyVector=TRUE) 
 # echo variable names
@@ -75,7 +93,7 @@ rm(json.file)
 # Only allow functions within these directories
 sapply(list.files(pattern="[.]R$", path=paste(ROOT, rp$common.lib, sep=''), full.names=TRUE), source);
 # Load DS specific function
-sapply(list.files(pattern="[.]R$", path=paste(ROOT, rp$ds.lib, sep=''), full.names=TRUE), source);
+sapply(list.files(pattern="[.]R$",path=paste(ROOT,rp$ds.lib,rp$ds.method,'/',sep=''), full.names=TRUE), source);
 # Load packages common to all DS methods
 LoadLib()
 
@@ -136,14 +154,29 @@ source(paste(ROOT, rp$script.lib, 'input historical and future predictor dataset
 #
 source(paste(ROOT, rp$script.lib,'primary.DS.loop.R',sep=''))
 
+#--------------------------------------------------------------------#
+# Section 
+# save window and kfold masks to binary R files
+# these are used in the final R script step
+# only the first HPC job does this
+if(job==1){
+  if(rp$create.window.mask | rp$supply.window.mask){
+    save(window.masks, file="window.masks.Rdata")  
+  }
+  if(rp$create.kfold.mask | rp$supply.kfold.mask){
+    save(kfold.masks, file="kfold.masks.Rdata")  
+  }  
+}
+
 
 #--------------------------------------------------------------------#
 # End of downscaling run
 # Write output to scratch
+# Output for each HPC job are binary R files (".RData")
 
 # rename the DS output array dimensions to the section completed by this HPC job
 if(rp$create.ds.output){
-  message(paste('Final Downscaled output file location:', ROOT, sep=""))
+  message(paste('Final Downscaled output file location: ', WORKROOT, sep=""))
   message("renaming DS output array to regional coordinates")
   # get length and dims in the original input source
   i.name <- seq(start.clip[1],start.clip[1]+count.clip[1]-1)
@@ -152,8 +185,7 @@ if(rp$create.ds.output){
 
 # write DS array to binary R object file
 # file name is dynamic based on job (section of area to DS)
-file.DS <- paste0("ds.out.",i.name[1],".",i.name[length(i.name)],".",j.name[1],".",j.name[length(j.name)],
-                  "-time",format(Sys.time(), "%I-%M-%p"),".Rdata")
+file.DS <- paste0("ds.out.",i.name[1],".",i.name[length(i.name)],".",j.name[1],".",j.name[length(j.name)],".Rdata")
 print(file.DS)
 save(ds.out, file=file.DS)
 
@@ -161,8 +193,7 @@ save(ds.out, file=file.DS)
 # write DS fit summary list to binary R object file
 # file name is dynamic based on job (section of area to DS)
 if(rp$create.fit.output){
-  file.fit <- paste0("fit.summary.",i.name[1],".",i.name[length(i.name)],".",j.name[1],".",j.name[length(j.name)],
-                     "-time",format(Sys.time(), "%I-%M-%p"),".Rdata")
+  file.fit <- paste0("fit.summary.",i.name[1],".",i.name[length(i.name)],".",j.name[1],".",j.name[length(j.name)],".Rdata")
   print(file.fit)
   save(fit.summary, file=file.fit)  
 }
@@ -170,6 +201,4 @@ if(rp$create.fit.output){
   message("Job completed, but will produce no downscale output")
 }
 
-# if needed
-# quit(save="no", runLast=FALSE)
 # END of file

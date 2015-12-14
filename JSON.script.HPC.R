@@ -6,20 +6,25 @@ stuff <- list(
 
   data.dir = '/scratch/dwilson/',
   work.dir = '/scratch/dwilson/',
-  common.lib = '/home/dwilson/FUDGE/RLibrary/common.functions/',
-  ds.lib = '/home/dwilson/FUDGE/RLibrary/DS.Library/DS.lm/',
-  script.lib = '/home/dwilson/FUDGE/RLibrary/script/',
+  common.lib = 'RLibrary/common.functions/',
+  ds.lib = 'RLibrary/DS.library/DS.EDQMv2/',
+  script.lib = 'RLibrary/script/',
   
-  ds.method = 'lm',
+  # options are: 'lm', or 'EDQMv2'
+  ds.method = 'EDQMv2',
+  # this option = TRUE only if you want to create a netCDF file
+  # Only set = TRUE is there are no k-folds
   create.ds.output=TRUE,
+  # Option not working yet ...
+  create.fit.output=TRUE,
   
   #--------------predictor and target variable names--------#
-  target.var = 'pr',
+  target.var = 'tasmax',
   predictor.vars = c('tasmax', 'pr', 'tasmin'), 
   time.step = 'day',
   calendar = 'Gregorian',
   
-  hist.target.file = 'pr_day_GFDL-HIRAM-C360_amip_r1i1p1_US48_19790101-20081231.nc',
+  hist.target.file = 'tasmax_day_GFDL-HIRAM-C360_amip_r1i1p1_US48_19790101-20081231.nc',
   hist.predictor.file = c(
     'tasmax_day_GFDL-HIRAM-C360-COARSENED_amip_r1i1p1_US48_19790101-20081231.nc',
     'pr_day_GFDL-HIRAM-C360-COARSENED_amip_r1i1p1_US48_19790101-20081231.nc',
@@ -52,7 +57,7 @@ stuff <- list(
   kfold.mask.files = c(NULL),  
   
   # S3 adjustments
-  apply.S3.outer = TRUE,
+  apply.S3.outer = FALSE,
   # list of instructions and the order
   # list must be tied to the CF variable
   s3.outer.list = c('PR'),
@@ -76,6 +81,6 @@ stuff <- list(
 run.parms <- toJSON(stuff, auto_unbox=TRUE, pretty=4)
 validate(run.parms)
 run.parms
-write(run.parms, "c:/FUDGE/work/runfile.HPC.json")
+write(run.parms, "c:/FUDGE/runfile.HPC.json")
 
 

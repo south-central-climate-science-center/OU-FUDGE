@@ -1,7 +1,7 @@
 # Assumption of single target variable
 
 message(paste("Reading in historical target data for variable: ", rp$target.var, sep=''))
-tmp.dir <- paste0(ROOT,rp$data.dir)
+tmp.dir <- DATAROOT
 filename <- paste0(tmp.dir, rp$hist.target.file)
 message(paste("Reading in historical target data: ", filename, sep=''))
 

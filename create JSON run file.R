@@ -4,35 +4,40 @@
 #install.packages("jsonlite")
 library(jsonlite)
 
+choose.OS <- function(x){ 
+  return(if(x=="Windows") drive <- c("C:/FUDGE/","C:/FUDGE/DATA/","C:/FUDGE/SCRATCH/") 
+         else if(x=="Linux") drive <- c("/home/dwilson/","/scratch/dwilson/DATA/","/scratch/dwilson/"))
+}
+drive <- choose.OS(Sys.info()["sysname"])
+ROOT <- drive[1]
+
 stuff <- list(
 
-  data.dir = 'DATA/',
-  work.dir = 'WORK/',
   common.lib = 'RLibrary/common.functions/',
-
-  # options are: 'DS.lm', or 'DS.EDQMv2'
-  ds.lib = 'RLibrary/DS.Library/DS.EDQMv2/',
+  ds.lib = 'RLibrary/DS.library/',
   script.lib = 'RLibrary/script/',
   
-  # options are: 'lm', or 'EDQMv2'
-  ds.method = 'EDQMv2',
+  # options are: 'DS.lm', or 'DS.EDQMv2'
+  ds.method = 'DS.lm',
+  # this option = TRUE only if you want to create a netCDF file
+  # Only set = TRUE is there are no k-folds
   create.ds.output=TRUE,
+  # Option not working yet ...
   create.fit.output=TRUE,
   
   #--------------predictor and target variable names--------#
-  target.var = 'tasmax',
-  predictor.vars = c('tasmax', 'pr', 'tasmin'), 
-  time.step = 'day',
-  calendar = 'Gregorian',
-  
-  hist.target.file = 'tasmax_day_GFDL-HIRAM-C360_amip_r1i1p1_US48_19790101-20081231.nc',
+  target.var = 'pr',
+  # first predictor var must be same as target
+  predictor.vars = c('pr', 'tasmax', 'tasmin'), 
+
+  hist.target.file = 'pr_day_GFDL-HIRAM-C360_amip_r1i1p1_US48_19790101-20081231.nc',
   hist.predictor.file = c(
-    'tasmax_day_GFDL-HIRAM-C360-COARSENED_amip_r1i1p1_US48_19790101-20081231.nc',
     'pr_day_GFDL-HIRAM-C360-COARSENED_amip_r1i1p1_US48_19790101-20081231.nc',
+    'tasmax_day_GFDL-HIRAM-C360-COARSENED_amip_r1i1p1_US48_19790101-20081231.nc',
     'tasmin_day_GFDL-HIRAM-C360-COARSENED_amip_r1i1p1_US48_19790101-20081231.nc'),
   fut.predictor.file = c(
-    'tasmax_day_GFDL-HIRAM-C360-COARSENED_sst2090_r1i1p1_US48_20860101-20951231.nc',
     'pr_day_GFDL-HIRAM-C360-COARSENED_sst2090_r1i1p1_US48_20860101-20951231.nc',
+    'tasmax_day_GFDL-HIRAM-C360-COARSENED_sst2090_r1i1p1_US48_20860101-20951231.nc',
     'tasmin_day_GFDL-HIRAM-C360-COARSENED_sst2090_r1i1p1_US48_20860101-20951231.nc'),
   
   apply.spat.mask = TRUE,
@@ -64,10 +69,10 @@ stuff <- list(
   # list must be tied to the CF variable
   s3.outer.list = c('PR'),
   # option threshold: 'us_trace' (0.01 in/day), 'global_trace' (0.1 mm/day), 'zero', or user-supplied value
-  pr.adj.args.outer=c(threshold='us_trace',
-                      lopt.drizzle=TRUE,
-                      lopt.conserve=TRUE,
-                      apply.0.mask=FALSE),
+  pr.adj.args.outer=c("threshold"='us_trace',
+                      "lopt.drizzle"=TRUE,
+                      "lopt.conserve"=TRUE,
+                      "apply.0.mask"=FALSE),
   
   # S5 adjustments
   apply.S5.outer = TRUE,
@@ -88,7 +93,7 @@ stuff <- list(
 run.parms <- toJSON(stuff, auto_unbox=TRUE, pretty=4)
 validate(run.parms)
 run.parms
-write(run.parms, "c:/FUDGE/runfile.json")
+write(run.parms, paste0(ROOT,"runfile.json"))
 
 
 
