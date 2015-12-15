@@ -1,0 +1,34 @@
+#!/bin/bash
+#
+# Notes: 
+#
+#   1. Walltime is specified in the form of hours:minutes:seconds
+#      (e.g. "12:30:00" 12.5 hours, "0:10:00" for ten minutes)
+#
+#   2. The email settings can be left blank. Everything else needs
+#      a valid value.
+#
+
+# Location to use for job scripts, output file, etc.
+# Do not include trailing slash; (i.e. use "/work/dir"
+#   instead of "/work/dir/")
+FUDGE_WORK_DIR="/data/users/elinde"
+
+
+FUDGE_DATA_DIR=""
+
+# Settings for the begin (pre-downscaling) job
+QUEUE_BEGIN="express"
+WALLTIME_BEGIN="0:05:00"
+EMAIL_NOTIFY_BEGIN=""
+
+# Settings for the downscaling jobs
+QUEUE_DS="express"
+WALLTIME_DS="0:05:00"
+EMAIL_NOTIFY_DS=""
+
+# Settings for the combine (post-downscaling) job
+QUEUE_COMBINE="express"
+WALLTIME_COMBINE="0:05:00"
+EMAIL_NOTIFY_COMBINE="elinde@okstate.edu"
+

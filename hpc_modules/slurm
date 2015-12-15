@@ -1,0 +1,69 @@
+#!/bin/bash
+# FUDGE HPC Module for Slurm
+# This script is intended to be sourced by the main HPC script.
+# It does not run independently.
+
+function f_echo_job_directives {
+
+	[ "${_job_name}" != "" ] && 
+		echo -e "#SBATCH -J ${_job_name}"
+
+	# The queue is the "partition" in slurm terminology.
+	[ "${_queue_name}" != "" ] && 
+		echo -e "#SBATCH -p ${_queue_name}"
+
+	[ "${_depend_list}" != "" ] && 
+		echo -e "#SBATCH -d afterok:${_depend_list}"
+
+	# Number of nodes
+	[ "${_nodes}" != "" ] &&
+		echo -e "#SBATCH -N ${_nodes}"
+
+	# Numbers of processors to request on the node
+	[ "${_cores_per_node}" != "" ] &&
+		echo -e "#SBATCH -n ${_cores_per_node}"
+
+	[ "${_walltime}" != "" ] && 
+		echo -e "#SBATCH --time ${_walltime}"
+
+	[ "${_email_notify}" != "" ] &&
+		echo -e "#SBATCH --mail-type=END,FAIL --mail-user=${_email_notify}"
+}
+
+function f_job_submit {
+	#
+        # This function submits a job. (The job may run as soon as the
+	# scheduler will schedule it.)
+        #
+        # The job submission script will be passed to this function as $1.
+        #
+        # The output of this function should be the job ID for the submitted
+        # job. No other data should echo to STDOUT.
+        #
+	sbatch $1 | awk '{print $5}'
+}
+
+function f_job_submit_hold {
+	#
+	# This function submits a job in a hold state. (It should not
+	# start running until released.)
+	# 
+	# The job submission script will be passed to this function as $1.
+	#
+	# The output of this function should be the job ID for the submitted
+	# job. No other data should echo to STDOUT.
+	#
+	sbatch -H $1 | awk '{print $5}'
+}
+
+function f_job_release {
+	#
+	# This function releases a job from a hold state (allowing it to run).
+	#
+	# The job ID of the target job will be passed to this function as $1.
+	#
+	# The STDOUT output of this function is not used.
+	#
+	scontrol release $1
+}
+
