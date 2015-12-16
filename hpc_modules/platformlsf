@@ -1,0 +1,74 @@
+#!/bin/bash
+# FUDGE HPC Module for Platform LSF
+# This script is intended to be sourced by the main HPC script.
+# It does not run independently.
+
+function f_echo_job_directives {
+
+	# remove the seconds from the given walltime variable
+	# new variable should be in form of hours:minutes
+	lsf_walltime=$(echo ${_walltime} | sed 's/:[0-9][0-9]$//')
+	
+	# convert the dependency list from colon-separated list of jobs
+	# into LSF's "done(job_id) && done(job2_id) ..." format
+	lsf_depend_list='done('"$(echo ${_depend_list} | sed 's/:/\) \&\& done\(/g')"')'
+
+	[ "${_job_name}" != "" ] && 
+		echo -e "#BSUB -J ${_job_name}"
+
+	[ "${_queue_name}" != "" ] && 
+		echo -e "#BSUB -q ${_queue_name}"
+
+	[ "${_depend_list}" != "" ] && 
+		echo -e "#BSUB -w \"${lsf_depend_list}\""
+
+	[ "${_nodes}" != "" ] && 
+		echo -e "#BSUB -n ${_nodes}"
+	
+	[ "${_cores_per_node}" != "" ] && 
+		echo -e "#BSUB -R \"span[ptile=${_cores_per_node}]\""
+
+	[ "${lsf_walltime}" != "" ] && 
+		echo -e "#BSUB -W walltime=${lsf_walltime}"
+
+	[ "${_email_notify}" != "" ] &&
+                echo -e "#BSUB -N -u ${_email_notify}"
+}
+
+function f_job_submit {
+	#
+        # This function submits a job. (The job may run as soon as the
+	# scheduler will schedule it.)
+        #
+        # The job submission script will be passed to this function as $1.
+        #
+        # The output of this function should be the job ID for the submitted
+        # job. No other data should echo to STDOUT.
+        #
+	bsub $1 | awk '{print $2}'
+}
+
+function f_job_submit_hold {
+	#
+	# This function submits a job in a hold state. (It should not
+	# start running until released.)
+	# 
+	# The job submission script will be passed to this function as $1.
+	#
+	# The output of this function should be the job ID for the submitted
+	# job. No other data should echo to STDOUT.
+	#
+	bsub -H $1 | awk '{print $2}'
+}
+
+function f_job_release {
+	#
+	# This function releases a job from a hold state (allowing it to run).
+	#
+	# The job ID of the target job will be passed to this function as $1.
+	#
+	# The STDOUT output of this function is not used.
+	#
+	bresume $1
+}
+

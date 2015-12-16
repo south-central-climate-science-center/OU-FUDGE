@@ -1,0 +1,67 @@
+#!/bin/bash
+# FUDGE HPC Module for Torque+Maui
+# This script is intended to be sourced by the main HPC script.
+# It does not run independently.
+
+function f_echo_job_directives {
+
+	[ "${_job_name}" != "" ] && 
+		echo -e "#PBS -N ${_job_name}"
+
+	[ "${_queue_name}" != "" ] && 
+		echo -e "#PBS -q ${_queue_name}"
+
+	[ "${_depend_list}" != "" ] && 
+		echo -e "#PBS -W depend=afterok:${_depend_list}"
+
+	[ "${_nodes}" != "" ] && [ "${_cores_per_node}" != "" ] &&
+		echo -e "#PBS -l nodes=${_nodes}:ppn=${_cores_per_node}"
+
+	[ "${_walltime}" != "" ] && 
+		echo -e "#PBS -l walltime=${_walltime}"
+
+	[ "${_email_notify}" != "" ] &&
+		echo -e "#PBS -m ae -M ${_email_notify}"
+
+	echo -e "#PBS -j oe"
+	echo -e "#    join the output in error file into one file"
+	echo -e "cd \${PBS_O_WORKDIR}"
+}
+
+function f_job_submit {
+	#
+        # This function submits a job. (The job may run as soon as the
+	# scheduler will schedule it.)
+        #
+        # The job submission script will be passed to this function as $1.
+        #
+        # The output of this function should be the job ID for the submitted
+        # job. No other data should echo to STDOUT.
+        #
+	qsub $1
+}
+
+function f_job_submit_hold {
+	#
+	# This function submits a job in a hold state. (It should not
+	# start running until released.)
+	# 
+	# The job submission script will be passed to this function as $1.
+	#
+	# The output of this function should be the job ID for the submitted
+	# job. No other data should echo to STDOUT.
+	#
+	qsub -h $1
+}
+
+function f_job_release {
+	#
+	# This function releases a job from a hold state (allowing it to run).
+	#
+	# The job ID of the target job will be passed to this function as $1.
+	#
+	# The STDOUT output of this function is not used.
+	#
+	qrls $1
+}
+
