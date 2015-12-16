@@ -1,0 +1,43 @@
+#!/bin/bash
+# Site-specific HPC settings for FUDGE
+#
+# This file defines the functions "f_echo_script_header" and
+# "f_echo_set_fudge_environment" and sets the value for SCHEDULER_MODULE
+# and QUEUE_DEFAULT.
+#
+
+# Settings for Cowboy (cowboy.hpc.okstate.edu)
+
+# Name of the module in the hpc_modules folder
+SCHEDULER_MODULE="torque_maui"
+
+# Queue/Partition to use if no queue is specified
+QUEUE_DEFAULT="batch"
+
+
+function f_echo_script_header {
+	#
+	# At minimum, this function outputs to STDOUT the shebang
+	# defining the shell to use in the job submit scripts.
+	#
+	# This function may output additional comment lines (i.e.
+	# lines beginning with "#" character) but MUST NOT output
+	# any lines containing commands.
+	#
+	cat <<-EOF_FUDGE_HEADER
+	#!/bin/bash
+	EOF_FUDGE_HEADER
+}
+
+function f_echo_set_fudge_environment {
+	#
+	# This function outputs to STDOUT the command(s) needed
+	# to set the environment for FUDGE and its dependencies.
+	#
+	cat <<-EOF_FUDGE_ENV
+	module load R/3.2.1
+	module load netcdf/4.3.3.1
+	module load udunits/2.2.20
+	EOF_FUDGE_ENV
+}
+
