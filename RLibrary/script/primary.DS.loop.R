@@ -161,8 +161,8 @@ if(rp$apply.S5.outer){
   # will need to make dynamic within the callS3AdjustmentOuter function
   ds.out <- tmp$out.S5
   # clean up mask output
-  dimnames(pr.masks.outer$ds)<-NULL
+  if(exists("pr.masks.outer")){
+    dimnames(pr.masks.outer$ds)<-NULL  
+  }
   rm(tmp)
 }
-
-

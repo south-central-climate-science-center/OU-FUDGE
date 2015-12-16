@@ -2,24 +2,24 @@
     "common.lib": "RLibrary/common.functions/",
     "ds.lib": "RLibrary/DS.library/",
     "script.lib": "RLibrary/script/",
-    "ds.method": "DS.lm",
+    "ds.method": "DS.EDQMv2",
     "create.ds.output": true,
     "create.fit.output": true,
-    "target.var": "pr",
+    "target.var": "tasmax",
     "predictor.vars": [
-        "pr",
         "tasmax",
+        "pr",
         "tasmin"
     ],
-    "hist.target.file": "pr_day_GFDL-HIRAM-C360_amip_r1i1p1_US48_19790101-20081231.nc",
+    "hist.target.file": "tasmax_day_GFDL-HIRAM-C360_amip_r1i1p1_US48_19790101-20081231.nc",
     "hist.predictor.file": [
-        "pr_day_GFDL-HIRAM-C360-COARSENED_amip_r1i1p1_US48_19790101-20081231.nc",
         "tasmax_day_GFDL-HIRAM-C360-COARSENED_amip_r1i1p1_US48_19790101-20081231.nc",
+        "pr_day_GFDL-HIRAM-C360-COARSENED_amip_r1i1p1_US48_19790101-20081231.nc",
         "tasmin_day_GFDL-HIRAM-C360-COARSENED_amip_r1i1p1_US48_19790101-20081231.nc"
     ],
     "fut.predictor.file": [
-        "pr_day_GFDL-HIRAM-C360-COARSENED_sst2090_r1i1p1_US48_20860101-20951231.nc",
         "tasmax_day_GFDL-HIRAM-C360-COARSENED_sst2090_r1i1p1_US48_20860101-20951231.nc",
+        "pr_day_GFDL-HIRAM-C360-COARSENED_sst2090_r1i1p1_US48_20860101-20951231.nc",
         "tasmin_day_GFDL-HIRAM-C360-COARSENED_sst2090_r1i1p1_US48_20860101-20951231.nc"
     ],
     "apply.spat.mask": true,
@@ -45,7 +45,7 @@
     "kfold.mask.files": {
 
     },
-    "apply.S3.outer": true,
+    "apply.S3.outer": false,
     "s3.outer.list": "PR",
     "pr.adj.args.outer": [
         "us_trace",
@@ -54,7 +54,14 @@
         "FALSE"
     ],
     "apply.S5.outer": true,
-    "apply.S5.wetday.mask": true,
+    "s5.outer.list": "SBiasCorr",
+    "apply.S5.wetday.mask": false,
+    "S5.SBiasCorr": true,
+    "SBCorr.args": [
+        -6,
+        6,
+        1
+    ],
     "apply.S3.inner": false,
     "s3.inner.list": {
 

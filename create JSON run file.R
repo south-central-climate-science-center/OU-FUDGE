@@ -18,7 +18,7 @@ stuff <- list(
   script.lib = 'RLibrary/script/',
   
   # options are: 'DS.lm', or 'DS.EDQMv2'
-  ds.method = 'DS.lm',
+  ds.method = 'DS.EDQMv2',
   # this option = TRUE only if you want to create a netCDF file
   # Only set = TRUE is there are no k-folds
   create.ds.output=TRUE,
@@ -26,18 +26,18 @@ stuff <- list(
   create.fit.output=TRUE,
   
   #--------------predictor and target variable names--------#
-  target.var = 'pr',
+  target.var = 'tasmax',
   # first predictor var must be same as target
-  predictor.vars = c('pr', 'tasmax', 'tasmin'), 
+  predictor.vars = c('tasmax', 'pr', 'tasmin'), 
 
-  hist.target.file = 'pr_day_GFDL-HIRAM-C360_amip_r1i1p1_US48_19790101-20081231.nc',
+  hist.target.file = 'tasmax_day_GFDL-HIRAM-C360_amip_r1i1p1_US48_19790101-20081231.nc',
   hist.predictor.file = c(
-    'pr_day_GFDL-HIRAM-C360-COARSENED_amip_r1i1p1_US48_19790101-20081231.nc',
     'tasmax_day_GFDL-HIRAM-C360-COARSENED_amip_r1i1p1_US48_19790101-20081231.nc',
+    'pr_day_GFDL-HIRAM-C360-COARSENED_amip_r1i1p1_US48_19790101-20081231.nc',
     'tasmin_day_GFDL-HIRAM-C360-COARSENED_amip_r1i1p1_US48_19790101-20081231.nc'),
   fut.predictor.file = c(
-    'pr_day_GFDL-HIRAM-C360-COARSENED_sst2090_r1i1p1_US48_20860101-20951231.nc',
     'tasmax_day_GFDL-HIRAM-C360-COARSENED_sst2090_r1i1p1_US48_20860101-20951231.nc',
+    'pr_day_GFDL-HIRAM-C360-COARSENED_sst2090_r1i1p1_US48_20860101-20951231.nc',
     'tasmin_day_GFDL-HIRAM-C360-COARSENED_sst2090_r1i1p1_US48_20860101-20951231.nc'),
   
   apply.spat.mask = TRUE,
@@ -63,7 +63,7 @@ stuff <- list(
   kfold.mask.files = c(NULL),  
   
   # S3 adjustments
-  apply.S3.outer = TRUE,
+  apply.S3.outer = FALSE,
   
   # list of instructions and their order of application
   # list must be tied to the CF variable
@@ -76,8 +76,13 @@ stuff <- list(
   
   # S5 adjustments
   apply.S5.outer = TRUE,
-  apply.S5.wetday.mask = TRUE,
-  
+  s5.outer.list = c('SBiasCorr'),
+  apply.S5.wetday.mask = FALSE,
+  # option produces a QC mask & sets up the bias correction
+  S5.SBiasCorr = TRUE,
+  # bias correction options (lower limit, upper limit, do bias correction (T/F))
+  SBCorr.args=c(-6,6,TRUE),
+
   apply.S3.inner = FALSE,
   s3.inner.list = c(NULL),
   
