@@ -1,6 +1,6 @@
 
 firstRv2 <- function(){
-  cores <- 15
+  cores <- 24
   i.count <- 194/(cores)
   j.count <- 114/(cores)
   i.low <- trunc(seq(1,194,i.count))

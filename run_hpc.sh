@@ -104,7 +104,7 @@ f_echo_set_fudge_environment >> ${BEGIN_SCRIPT}
 cat <<-EOF_BEGIN >> ${BEGIN_SCRIPT}
 echo TEST: Begin Script
 sleep 10s
-Rscript get_vectors.R > ${DS_INPUTS}
+Rscript ${FUDGE_ROOT}/firstRv2.R > ${DS_INPUTS}
 EOF_BEGIN
 
 # Submit the begin script and get the job ID
@@ -116,14 +116,14 @@ BEGIN_JOB_ID=$(f_job_submit_hold ${BEGIN_SCRIPT})
 # The downscaling jobs will only start after the begin script ends successfully.
 #
 DS_JOB_COUNT=0
-Rscript get_vectors.R | while read rcmd_args; do
+Rscript ${FUDGE_ROOT}/firstRv2.R | while read rcmd_args; do
 	DS_JOB_COUNT=$(( ${DS_JOB_COUNT} + 1 ))
 	DS_JOB_SUFFIX=$(printf "%04d" ${DS_JOB_COUNT})
 	DS_JOB_NAME="fudge_ds_${DS_JOB_SUFFIX}"
 	DS_JOB_SCRIPT="${DS_JOB_NAME}.pbs"
 
 	# Task to be run (i.e. the downscaling)
-	RCMD="R CMD BATCH \"--args=${rcmd_args}\" Rjobs.R"
+	RCMD="R CMD BATCH \"--args ${rcmd_args}\" ${FUDGE_ROOT}/MAIN.Runcode.R ${DS_JOB_NAME}.Rout"
 	# ? Should this be MAIN_Runcode.R instead of Rjobs.R ?
 
 	# Export variables for use in the f_echo_job_directives function
@@ -140,7 +140,7 @@ Rscript get_vectors.R | while read rcmd_args; do
 	f_echo_job_directives >> ${DS_JOB_SCRIPT}
 	f_echo_set_fudge_environment >> ${DS_JOB_SCRIPT}
 	cat <<-EOF_DS >> ${DS_JOB_SCRIPT}
-	#${RCMD}
+	${RCMD}
 	echo TEST: ${RCMD}
 	echo Job ID: \${PBS_JOBID}
 	echo Output of begin job:
@@ -169,7 +169,7 @@ export _queue_name="${QUEUE_COMBINE}"
 export _depend_list="${JOB_LIST_STRING}"
 export _walltime="${WALLTIME_COMBINE}"
 export _nodes="1"
-export _cores_per_node="1"
+export _cores_per_node="12"
 export _email_notify="${EMAIL_NOTIFY_COMBINE}"
 
 # Write the combine script
@@ -178,6 +178,7 @@ f_echo_job_directives >> ${COMBINE_SCRIPT}
 f_echo_set_fudge_environment >> ${COMBINE_SCRIPT}
 cat <<-EOF_COMBINE >> ${COMBINE_SCRIPT}
 echo TEST: Combine Script
+Rscript ${FUDGE_ROOT}/Final.Runcode.R
 for i in {1..$(cat ${JOB_LIST} | wc -l)}; do
 	SUFFIX=\$(printf "%04d" \${i})
 	echo fudge_ds_\${SUFFIX}

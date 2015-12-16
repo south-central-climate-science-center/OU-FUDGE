@@ -12,7 +12,7 @@
 # Location to use for job scripts, output file, etc.
 # Do not include trailing slash; (i.e. use "/work/dir"
 #   instead of "/work/dir/")
-FUDGE_WORK_DIR="/data/users/elinde"
+FUDGE_WORK_DIR="/home/dwilson/OU-FUDGE"
 
 
 FUDGE_DATA_DIR=""
@@ -20,15 +20,15 @@ FUDGE_DATA_DIR=""
 # Settings for the begin (pre-downscaling) job
 QUEUE_BEGIN="express"
 WALLTIME_BEGIN="0:05:00"
-EMAIL_NOTIFY_BEGIN=""
+EMAIL_NOTIFY_BEGIN="dunc.wilson9@gmail.com"
 
 # Settings for the downscaling jobs
-QUEUE_DS="express"
-WALLTIME_DS="0:05:00"
+QUEUE_DS="batch"
+WALLTIME_DS="2:00:00"
 EMAIL_NOTIFY_DS=""
 
 # Settings for the combine (post-downscaling) job
-QUEUE_COMBINE="express"
-WALLTIME_COMBINE="0:05:00"
-EMAIL_NOTIFY_COMBINE="elinde@okstate.edu"
+QUEUE_COMBINE="batch"
+WALLTIME_COMBINE="5:00:00"
+EMAIL_NOTIFY_COMBINE="dunc.wilson9@gmail.com"
 
