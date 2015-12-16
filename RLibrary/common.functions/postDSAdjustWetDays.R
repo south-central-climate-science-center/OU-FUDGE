@@ -85,6 +85,7 @@ callPRPostproc <- function(){
     
     # Now, expand the 3D array adjusted.ds.single -->> the original 5D array
     # Doing it this way preserves the original Windows and Kfold array indicies for non-NA values
+    full.dims <- dim(ds.out)
     tmp.q<-NULL
     for(i in 1:length(window.masks)){
       tmp.q[i] <- list(out.list)
@@ -111,7 +112,13 @@ callPRPostproc <- function(){
     az <- mapply(revert,out.list,tmp.q3,SIMPLIFY=TRUE)  
     az <- unlist(az)
     az <- array(az,dim=full.dims)
-    
+    # add dimnames
+    i.name <- seq(1,full.dims[1])
+    j.name <- seq(1,full.dims[2])
+    t.name <- seq(1,full.dims[3])
+    w.name <- window.masks
+    k.name <- kfold.masks
+    dimnames(az)<-list(i.name,j.name,t.name,w.name,k.name)
     mean(out.list, na.rm=T)
     mean(az,na.rm=T)
     out.S5 <- list("out.S5"=az)

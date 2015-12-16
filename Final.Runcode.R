@@ -89,9 +89,6 @@ for(i in 1:length(tmp.files)){
   rm(ds.out)
 }
 
-#summary(ds.out.full[50:51,,,,],na.rm=T)
-#(ds.out.full[50,62,1:40,,])
-
 # Write full array to binary R file
 file.DS <- "finalDSoutput.Rdata"
 print(file.DS)
@@ -133,7 +130,7 @@ if(rp$create.ds.output){
                              dims.fut[3]),
                        dimnames=list(i.name,j.name,t.name))
   nc.obj <- nc_open("tmp.nc", write=TRUE)
-  message("writing nc vars")
+  message("writing nc vars to file: tmp.nc")
   # first, fill wih NA values (as out of bounds vals)
   ncvar_put(nc.obj, p.var, ds.out.NA)
   # now write downscale results

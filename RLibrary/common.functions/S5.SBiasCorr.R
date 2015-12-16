@@ -83,6 +83,13 @@ callSBCorr <- function(){
   az <- mapply(revert,adjust.vec,tmp.q3,SIMPLIFY=TRUE)  
   az <- unlist(az)
   az <- array(az,dim=full.dims)
+  # add dimnames
+  i.name <- seq(1,full.dims[1])
+  j.name <- seq(1,full.dims[2])
+  t.name <- seq(1,full.dims[3])
+  w.name <- window.masks
+  k.name <- kfold.masks
+  dimnames(az)<-list(i.name,j.name,t.name,w.name,k.name)
   mean(adjust.vec, na.rm=T)
   mean(az,na.rm=T)
   out.S5 <- list("out.S5"=az,"qc.mask"=qc.mask)
