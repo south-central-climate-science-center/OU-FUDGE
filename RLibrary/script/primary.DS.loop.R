@@ -95,12 +95,11 @@ for (window in 1:length(window.masks)){
     # longitude index
     #for(i.index in i.index.lower:i.index.upper){
     for(i.index in 1:length(list.target$clim.in[,1,1])){
-
+      message(paste("Begin processing point with lon index (i) = ", i.index, "and lat index (j) = 1"))
       # latitude index
       #for(j.index in j.index.lower:j.index.upper){
       for(j.index in 1:length(list.target$clim.in[1,,1])){
-        message(paste("Begin processing point with lon index (i) = ", i.index, "and lat index (j) =", j.index))
- 
+        
         # step avoids looping over subsets of all zero's data
         if(all(!is.na(list.target$clim.in[i.index,j.index,]))){
         

@@ -12,7 +12,7 @@
 #
 choose.OS <- function(x){ 
   return(if(x=="Windows") drive <- c("C:/FUDGE/","C:/FUDGE/DATA/","C:/FUDGE/SCRATCH/") 
-         else if(x=="Linux") drive <- c("/home/dwilson/","/scratch/dwilson/DATA/","/scratch/dwilson/"))
+         else if(x=="Linux") drive <- c("/home/dwilson/OU-FUDGE/","/scratch/dwilson/DATA/","/scratch/dwilson/"))
 }
 drive <- choose.OS(Sys.info()["sysname"])
 ROOT <- drive[1]
