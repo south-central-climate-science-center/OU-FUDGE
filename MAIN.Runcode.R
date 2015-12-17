@@ -46,7 +46,7 @@ getwd()
 
 if(Sys.info()["sysname"]=='Windows'){
   # on a PC, do one section at a time
-  start.clip <- c(100,100,1)
+  start.clip <- c(1,1,1)
   # counts [1:2] must be > 1 ... for now. 
   # counts are number of grid cells for i,j and time (time=-1 means run all cells)
   count.clip <- c(5,5,-1)
@@ -56,14 +56,16 @@ if(Sys.info()["sysname"]=='Linux'){
   console.args <- commandArgs(TRUE)
   print(console.args)
   # i is longitude index in the netCDF file, j is latitude
-  i.lower <- as.numeric(console.args[1])
-  i.count <- as.numeric(console.args[2])
-  j.lower <- as.numeric(console.args[3])
-  j.count <- as.numeric(console.args[4])
+  job.count <- as.numeric(console.args[1])
+  i.lower <- as.numeric(console.args[2])
+  i.count <- as.numeric(console.args[3])
+  j.lower <- as.numeric(console.args[4])
+  j.count <- as.numeric(console.args[5])
   # perfect model is [194,114,]
   start.clip <- c(i.lower,1,1)
   count.clip <- c(i.count,114,-1)
-  if(start.clip[1]==1){ job<-1
+  # set 'job' variable = 1 only for the first HPC job
+  if(job.count==1){ job<-1
   }else{
     job<-0
   }

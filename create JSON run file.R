@@ -52,6 +52,8 @@ stuff <- list(
   
   # window masks can be created and/or supplied
   create.window.mask = TRUE,
+  # mask options: 'seasonal', 'monthly'
+  apply.window.mask.name = 'monthly',
   supply.window.mask = FALSE,
   # this can be NULL, 
   window.mask.files = c(NULL),

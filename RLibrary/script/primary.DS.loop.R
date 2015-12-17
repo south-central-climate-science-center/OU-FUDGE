@@ -20,8 +20,10 @@ if(rp$apply.S3.outer){
 if(rp$create.window.mask){
   # create and list window masks
   # need to generalize to a common function name in the run parms file
-  windows <- createWindowMask.seasonal()
-  window.masks <- unlist(windows$season)
+  fxn.windows <- createWindowMask()
+  tmp <- fxn.windows()
+  windows <- tmp
+  window.masks <- unlist(windows$window.mask.names)
 }else{
   if(rp$supply.window.mask){
     # read existing window masks
@@ -86,7 +88,7 @@ fit.summary <- data.frame()
 # spatial & temporal windowing masks index
 message(paste("DS with method ", rp$ds.method, " ", rp$ds.lib))
 for (window in 1:length(window.masks)){
-  message(paste("Begin Window mask = ", window))
+  message(paste("Begin Window mask = ", window.masks[[window]]))
 
   # k-fold validation index
   for(kfold in 1:length(kfold.masks)){

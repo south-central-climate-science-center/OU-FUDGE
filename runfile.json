@@ -36,6 +36,7 @@
         "fut.target"
     ],
     "create.window.mask": true,
+    "apply.window.mask.name": "monthly",
     "supply.window.mask": false,
     "window.mask.files": {
 
