@@ -123,7 +123,7 @@ Rscript ${FUDGE_ROOT}/firstRv2.R | while read rcmd_args; do
 	DS_JOB_SCRIPT="${DS_JOB_NAME}.pbs"
 
 	# Task to be run (i.e. the downscaling)
-	RCMD="R CMD BATCH \"--args ${rcmd_args}\" ${FUDGE_ROOT}/MAIN.Runcode.R ${DS_JOB_NAME}.Rout"
+	RCMD="R CMD BATCH \"--args ${DS_JOB_COUNT} ${rcmd_args}\" ${FUDGE_ROOT}/MAIN.Runcode.R ${DS_JOB_NAME}.Rout"
 	# ? Should this be MAIN_Runcode.R instead of Rjobs.R ?
 
 	# Export variables for use in the f_echo_job_directives function
