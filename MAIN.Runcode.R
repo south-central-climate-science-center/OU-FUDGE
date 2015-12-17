@@ -61,9 +61,9 @@ if(Sys.info()["sysname"]=='Linux'){
   i.count <- as.numeric(console.args[3])
   j.lower <- as.numeric(console.args[4])
   j.count <- as.numeric(console.args[5])
-  # perfect model is [194,114,]
-  start.clip <- c(i.lower,1,1)
-  count.clip <- c(i.count,114,-1)
+  # perfect model is [lon=1:194,lat=1:114,time]
+  start.clip <- c(i.lower,j.lower,1)
+  count.clip <- c(i.count,j.count,-1)
   # set 'job' variable = 1 only for the first HPC job
   if(job.count==1){ job<-1
   }else{
