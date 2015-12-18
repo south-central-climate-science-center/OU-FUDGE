@@ -107,9 +107,9 @@ callPRPostproc <- function(){
         x<-NA
       }
     }
-    dim(out.list)
+    dim(adjust.ds)
     dim(tmp.q3)
-    az <- mapply(revert,out.list,tmp.q3,SIMPLIFY=TRUE)  
+    az <- mapply(revert,adjust.ds,tmp.q3,SIMPLIFY=TRUE)  
     az <- unlist(az)
     az <- array(az,dim=full.dims)
     # add dimnames
@@ -119,7 +119,7 @@ callPRPostproc <- function(){
     w.name <- window.masks
     k.name <- kfold.masks
     dimnames(az)<-list(i.name,j.name,t.name,w.name,k.name)
-    mean(out.list, na.rm=T)
+    mean(adjust.ds, na.rm=T)
     mean(az,na.rm=T)
     out.S5 <- list("out.S5"=az)
     return(out.S5)          

@@ -11,7 +11,7 @@ callDS<-function(target=NA,df.hist=NA,df.fut=NA){
   #' as of 12-29
   lengthCF<-length(df.fut[[1]])
   lengthCH<-length(df.hist[[1]])
-  lengthLH<-length(target)
+  #lengthLH<-length(target)
   
   CF.dim <- lengthCF
   CH.dim <- lengthCH
@@ -25,9 +25,9 @@ callDS<-function(target=NA,df.hist=NA,df.fut=NA){
   df$LH<-target
   
   temp<-temp[order(temp$CF),]
-  # drop NA's due to windowing or kfold
+  # drop NA's due to windowing and/or kfold masking
   temp <- na.omit(temp)
-  # define vector with probabilities [0,1] -- length of non NA values
+  # define vector with probabilities [0,1] -- this has length of non-NA values
   prob<-seq(0.001,0.999,length.out=length(temp$CF))
   temp$qLHecdfCFqCF<-quantile(df$LH,ecdf(temp$CF)(quantile(temp$CF,prob,na.rm =TRUE)),na.rm =TRUE)
   temp$qCHecdfCFqCF<-quantile(df$CH,ecdf(temp$CF)(quantile(temp$CF,prob,na.rm =TRUE)),na.rm =TRUE)

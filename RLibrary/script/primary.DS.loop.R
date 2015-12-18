@@ -83,7 +83,7 @@ fit.summary <- data.frame()
 
 
 # This is the primary looping structure that trains and applies DS to the datasets
-# Loops: Window masks --> kfold masks --> Lat --> Lon
+# Loops: Window masks --> kfold masks --> Lon --> Lat
 #
 # spatial & temporal windowing masks index
 message(paste("DS with method ", rp$ds.method, " ", rp$ds.lib))
@@ -165,5 +165,5 @@ if(rp$apply.S5.outer){
   if(exists("pr.masks.outer")){
     dimnames(pr.masks.outer$ds)<-NULL  
   }
-  rm(tmp)
+  #rm(tmp)
 }
