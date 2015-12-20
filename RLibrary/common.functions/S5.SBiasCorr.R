@@ -46,7 +46,7 @@ callSBCorr <- function(){
     }
   }
   qc.mask <- list(mask.vec)
-  bias.corrected <- sum(is.na(mask.vec))
+  bias.corrected <- sum(is.na(mask.vec)) - sum(is.na(fut.pred))
   total.cells <- sum(!is.na(mask.vec)) + sum(is.na(mask.vec))
   print(paste("Bias correction applied to ",bias.corrected," cells"))
   print(paste("out of  ",total.cells," cells"))

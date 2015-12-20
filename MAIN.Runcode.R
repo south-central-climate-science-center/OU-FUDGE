@@ -46,10 +46,10 @@ getwd()
 
 if(Sys.info()["sysname"]=='Windows'){
   # on a PC, do one section at a time
-  start.clip <- c(62,51,1)
+  start.clip <- c(60,10,1)
   # counts [1:2] must be > 1 ... for now. 
   # counts are number of grid cells for i,j and time (time=-1 means run all cells)
-  count.clip <- c(5,5,-1)
+  count.clip <- c(2,20,-1)
   job<-1  
 }
 if(Sys.info()["sysname"]=='Linux'){
